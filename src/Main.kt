@@ -6,9 +6,10 @@ fun main() {
     val snake = Snake()
     snake.grow()
     snake.grow()
-    println(snake.movingDirection)
+    println(snake)
     snake.move(Direction.RIGHT)
     snake.move(Direction.RIGHT)
     snake.move(Direction.UP)
+    snake.move(Direction.LEFT)
     println(snake)
 }
