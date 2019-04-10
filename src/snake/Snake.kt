@@ -33,17 +33,9 @@ class Snake {
         if (direction == this.movingDirection.opposite) {
             throw IllegalArgumentException("Can't move to snake's opposite direction.")
         }
-
-        var nextLocation = this.head.location.translateBy(direction.translation)
-        this.pieces.forEach { piece ->
-            val oldLocation = piece.location
-            piece.location = nextLocation
-            nextLocation = oldLocation
-        }
-
+        val trailLocation = movePiecesForwardAndGetTrail(direction)
         if (this.isGrowing) {
-            this.addPieceTo(nextLocation)
-            this.growCount--
+            this.growTo(trailLocation)
         }
     }
 
@@ -59,6 +51,21 @@ class Snake {
     private fun addPieceTo(location: Point) {
         val newPiece = SnakePiece(location)
         this.pieces.add(newPiece)
+    }
+
+    private fun movePiecesForwardAndGetTrail(direction: Direction): Point {
+        var nextLocation = this.head.location.translateBy(direction.translation)
+        this.pieces.forEach { piece ->
+            val oldLocation = piece.location
+            piece.location = nextLocation
+            nextLocation = oldLocation
+        }
+        return nextLocation
+    }
+
+    private fun growTo(location: Point) {
+        this.addPieceTo(location)
+        this.growCount--
     }
 
 }
