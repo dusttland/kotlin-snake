@@ -10,11 +10,14 @@ class Snake {
     private var growCount = 0
 
     override fun toString(): String {
-        return "Length: ${this.length}, Pieces: ${this.pieces}"
+        return "Length: ${this.length}, Size: ${this.size}, Pieces: ${this.pieces}"
     }
 
     val length: Int
         get() = this.pieces.size
+
+    val size: Int
+        get() = this.length + this.growCount
 
     fun grow() {
         this.growCount++
