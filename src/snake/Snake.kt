@@ -25,7 +25,7 @@ class Snake {
 
     val movingDirection: Direction
         get() {
-            val moveTranslation: Point = this.head.location.translateBy(this.neck.location.negative)
+            val moveTranslation: Point = this.head.location - this.neck.location
             return Direction.fromTranslation(moveTranslation)
         }
 
@@ -54,7 +54,7 @@ class Snake {
     }
 
     private fun movePiecesForwardAndGetTrail(direction: Direction): Point {
-        var nextLocation = this.head.location.translateBy(direction.translation)
+        var nextLocation = this.head.location + direction.translation
         this.pieces.forEach { piece ->
             val oldLocation = piece.location
             piece.location = nextLocation

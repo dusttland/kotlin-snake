@@ -1,17 +1,6 @@
 package snake
 
-data class Point(
-        val x: Int,
-        val y: Int
-) {
-    fun translateBy(x: Int, y: Int): Point {
-        return Point(this.x + x, this.y + y)
-    }
-
-    fun translateBy(other: Point): Point {
-        return this.translateBy(other.x, other.y)
-    }
-
-    val negative: Point
-        get() = Point(-this.x, -this.y)
+data class Point(val x: Int, val y: Int) {
+    operator fun plus(other: Point) = Point(this.x + other.x, this.y + other.y)
+    operator fun minus(other: Point) = Point(this.x - other.x, this.y - other.y)
 }
