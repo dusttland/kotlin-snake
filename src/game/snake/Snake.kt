@@ -1,4 +1,7 @@
-package snake
+package game.snake
+
+import game.geo.Direction
+import game.geo.Point
 
 class Snake {
 

@@ -1,4 +1,6 @@
-package snake
+package game.snake
+
+import game.geo.Point
 
 class SnakePiece(
         var location: Point

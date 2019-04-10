@@ -1,4 +1,6 @@
-import snake.*
+import game.Game
+import game.geo.Direction
+import game.snake.*
 
 fun main() {
     println("Hello snake.")
@@ -12,4 +14,6 @@ fun main() {
     snake.move(Direction.UP)
     snake.move(Direction.LEFT)
     println(snake)
+
+    Game()
 }
