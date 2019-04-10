@@ -11,4 +11,7 @@ data class Point(
     fun translateBy(other: Point): Point {
         return this.translateBy(other.x, other.y)
     }
+
+    val negative: Point
+        get() = Point(-this.x, -this.y)
 }
