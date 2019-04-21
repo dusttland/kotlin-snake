@@ -33,9 +33,7 @@ class Snake {
     }
 
     fun move(direction: Direction) {
-        if (direction == this.movingDirection.opposite) {
-            throw IllegalArgumentException("Can't move to snake's opposite direction.")
-        }
+        this.throwExceptionIfInvalidDirection(direction)
         val trailLocation = movePiecesForwardAndGetTrail(direction)
         if (this.isGrowing) {
             this.growTo(trailLocation)
@@ -43,6 +41,8 @@ class Snake {
     }
 
     fun isAt(point: Point): Boolean = this.pieces.any { point == it.location }
+
+    fun isAt(direction: Direction): Boolean = this.isAt(this.head.location + direction.translation)
 
 
     private val head: SnakePiece
@@ -57,6 +57,16 @@ class Snake {
     private fun addPieceTo(location: Point) {
         val newPiece = SnakePiece(location)
         this.pieces.add(newPiece)
+    }
+
+    private fun throwExceptionIfInvalidDirection(direction: Direction) {
+        if (direction == this.movingDirection.opposite) {
+            throw IllegalArgumentException("Can't move to snake's opposite direction.")
+        }
+
+        if (this.isAt(direction)) {
+            throw IllegalArgumentException("Can't move into itself.")
+        }
     }
 
     private fun movePiecesForwardAndGetTrail(direction: Direction): Point {

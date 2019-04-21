@@ -5,7 +5,7 @@ import game.geo.Point
 import game.keyevent.KeyEvent
 import game.keyevent.KeyEventListener
 import game.snake.Snake
-import game.view.snakeBoard
+import game.view.SnakeBoardView
 import org.w3c.dom.Element
 import kotlin.browser.document
 
@@ -13,14 +13,15 @@ class Game : KeyEventListener {
 
     private val snake = Snake()
     private lateinit var snakeBoard: Element
+    private lateinit var boardBoxes: Map<Point, Element>
 
     init {
         KeyEvent(listener = this)
         this.prepareBoard()
         this.drawSnake()
-        this.snake.grow()
-        this.snake.grow()
-        this.snake.grow()
+        for (i in 0..20) {
+            this.snake.grow()
+        }
     }
 
     override fun onArrowKey(direction: Direction) {
@@ -42,7 +43,7 @@ class Game : KeyEventListener {
 
     private fun drawBoxAt(point: Point) {
         val isActive = this.snake.isAt(point)
-        val element = this.boxElementAt(point) ?: return
+        val element = this.boardBoxes[point] ?: throw IllegalArgumentException("No board box at $point.")
 
         element.classList.remove("active")
 
@@ -52,20 +53,34 @@ class Game : KeyEventListener {
     }
 
     private fun prepareBoard() {
-        val container = document.getElementById("container") ?: error("Missing #container")
-        val snakeBoard = snakeBoard(BOARD_SIZE)
+        val container = document.getElementById("container")
+                ?: throw IllegalStateException("Missing #container")
+        val snakeBoard = SnakeBoardView.nodeOfSize(BOARD_SIZE)
         container.appendChild(snakeBoard)
-        this.snakeBoard = container.querySelector("#snake-board") ?: error("Missing #snake-board")
+
+        val snakeBoardSelector = "#${SnakeBoardView.ID}"
+        this.snakeBoard = container.querySelector(snakeBoardSelector)
+                ?: throw IllegalStateException("Missing $snakeBoardSelector")
+
+        this.prepareBoardBoxes()
+    }
+
+    private fun prepareBoardBoxes() {
+        val boardBoxes = mutableMapOf<Point, Element>()
+        for (i in 0..BOARD_SIZE) {
+            for (j in 0..BOARD_SIZE) {
+                val point = Point(i, j)
+                val box = this.boxElementAt(point) ?: throw IllegalStateException("Missing box element at $point")
+                boardBoxes[point] = box
+            }
+        }
+        this.boardBoxes = boardBoxes
     }
 
     private fun boxElementAt(point: Point): Element? {
-        val boardPoint = point.snakeBoardPoint
-        val selector = "#box-${boardPoint.x}-${boardPoint.y}"
+        val selector = "#${SnakeBoardView.boxIdOf(point)}"
         return this.snakeBoard.querySelector(selector)
     }
-
-    private val Point.snakeBoardPoint: Point
-        get() = Point(this.y, this.x)
 
     companion object {
         const val BOARD_SIZE = 30
