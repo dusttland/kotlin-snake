@@ -7,7 +7,5 @@ class SnakePiece(
 ) {
     constructor(x: Int, y: Int) : this(Point(x, y))
 
-    override fun toString(): String {
-        return "SnakePiece(${this.location.x}, ${this.location.y})"
-    }
+    override fun toString() = "SnakePiece(${this.location.x}, ${this.location.y})"
 }

@@ -12,9 +12,9 @@ class Snake {
 
     private var growCount = 0
 
-    override fun toString(): String {
-        return "Length: ${this.length}, Size: ${this.size}, Pieces: ${this.pieces}"
-    }
+
+    override fun toString() = "Length: ${this.length}, Size: ${this.size}, Pieces: ${this.pieces}"
+
 
     val length: Int
         get() = this.pieces.size
@@ -22,15 +22,15 @@ class Snake {
     val size: Int
         get() = this.length + this.growCount
 
-    fun grow() {
-        this.growCount++
-    }
-
     val movingDirection: Direction
         get() {
             val moveTranslation: Point = this.head.location - this.neck.location
             return Direction.fromTranslation(moveTranslation)
         }
+
+    fun grow() {
+        this.growCount++
+    }
 
     fun move(direction: Direction) {
         if (direction == this.movingDirection.opposite) {
@@ -41,6 +41,7 @@ class Snake {
             this.growTo(trailLocation)
         }
     }
+
 
     private val head: SnakePiece
         get() = this.pieces[0]

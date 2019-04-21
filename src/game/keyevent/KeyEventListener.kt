@@ -1,8 +1,7 @@
 package game.keyevent
 
+import game.geo.Direction
+
 interface KeyEventListener {
-    fun onUpKey()
-    fun onRightKey()
-    fun onDownKey()
-    fun onLeftKey()
+    fun onArrowKey(direction: Direction)
 }
