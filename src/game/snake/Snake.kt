@@ -42,6 +42,8 @@ class Snake {
         }
     }
 
+    fun isAt(point: Point): Boolean = this.pieces.any { point == it.location }
+
 
     private val head: SnakePiece
         get() = this.pieces[0]
