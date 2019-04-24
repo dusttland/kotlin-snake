@@ -1,4 +1,4 @@
-package game.view
+package view
 
 import game.geo.Point
 import kotlinx.html.dom.create
@@ -14,9 +14,9 @@ object SnakeBoardView {
 
     fun nodeOfSize(size: Int) = document.create.table {
         id = ID
-        for (i in 0..size) {
+        for (i in 0 until size) {
             tr {
-                for (j in 0..size) {
+                for (j in 0 until size) {
                     td("snake-board-box") {
                         id = boxIdOf(Point(j, i))
                     }
