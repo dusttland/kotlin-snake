@@ -1,5 +1,6 @@
 package game
 
 data class GameStats(
-    val snakeSize: Int
+        val isGameRunning: Boolean,
+        val snakeSize: Int
 )

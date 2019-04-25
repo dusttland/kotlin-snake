@@ -14,8 +14,14 @@ object MainView {
 
     val node: Node
         get() = document.create.div {
-            h1 { +"This is the Snake." }
+            h1 { +"This is the Kotlin-Snake." }
             p { +"Here you can play snake somewhere" }
+            p {
+                a("https://github.com/dusttland/kotlin-snake/tree/kotlinx") {
+                    target = "blank"
+                    +"Source code"
+                }
+            }
             h2 {
                 id = ID.STATS
 

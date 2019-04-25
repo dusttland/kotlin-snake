@@ -1,6 +1,6 @@
 package game
 
-import game.geo.Point
+import geo.Point
 import game.snake.Snake
 import org.w3c.dom.Element
 

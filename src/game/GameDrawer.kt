@@ -2,8 +2,10 @@ package game
 
 import controller.findElement
 import controller.removeChildren
-import game.geo.Point
+import geo.Point
+import game.view.SnakeBoardView
 import org.w3c.dom.Element
+import kotlin.dom.removeClass
 
 class GameDrawer(
         private val params: GameParams
@@ -32,12 +34,12 @@ class GameDrawer(
         val hasFood = point == this.params.foodLocation
         val element = this.boxElementAt(point)
 
-        element.classList.remove(SNAKE_PIECE_CLASS, FOOD_CLASS)
+        element.removeClass(SnakeBoardView.CLASS.SNAKE, SnakeBoardView.CLASS.FOOD)
 
         if (isSnake) {
-            element.classList.add(SNAKE_PIECE_CLASS)
+            element.classList.add(SnakeBoardView.CLASS.SNAKE)
         } else if (hasFood) {
-            element.classList.add(FOOD_CLASS)
+            element.classList.add(SnakeBoardView.CLASS.FOOD)
         }
     }
 
@@ -66,12 +68,6 @@ class GameDrawer(
         this.params.container.removeChildren()
         val boardNode = SnakeBoardView.nodeOfSize(this.params.boardSize)
         this.params.container.appendChild(boardNode)
-    }
-
-
-    companion object {
-        const val SNAKE_PIECE_CLASS = "active"
-        const val FOOD_CLASS = "food"
     }
 
 }

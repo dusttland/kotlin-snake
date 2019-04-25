@@ -1,6 +1,6 @@
 package keyevent
 
-import game.geo.Direction
+import geo.Direction
 
 interface KeyEventListener {
     fun onArrowKey(direction: Direction)

@@ -1,4 +1,4 @@
-package game.geo
+package geo
 
 enum class Direction {
 

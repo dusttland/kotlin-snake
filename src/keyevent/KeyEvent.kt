@@ -1,6 +1,6 @@
 package keyevent
 
-import game.geo.Direction
+import geo.Direction
 import org.w3c.dom.events.KeyboardEvent
 import kotlin.browser.document
 

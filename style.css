@@ -1,9 +1,13 @@
+.snake-board {
+    border: 1px solid black;
+}
+
 .snake-board-box {
     width: 10px;
     height: 10px;
 }
 
-.snake-board-box.active {
+.snake-board-box.snake {
     background-color: black;
 }
 

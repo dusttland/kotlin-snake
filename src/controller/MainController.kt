@@ -22,11 +22,15 @@ class MainController(
         this.statsText = findElement(MainView.ID.STATS)
         this.snakeBoardContainer = findElement(MainView.ID.SNAKE_BOARD_CONTAINER)
 
-        this.game = Game(this.snakeBoardContainer, size = 30, listener = this)
+        this.game = Game(this.snakeBoardContainer, size = 20, listener = this)
     }
 
     override fun onGameStateChanged(stats: GameStats) {
-        this.statsText.innerHTML = "Size: ${stats.snakeSize}"
+        if (stats.isGameRunning) {
+            this.statsText.innerHTML = "Size: ${stats.snakeSize}"
+        } else {
+            this.statsText.innerHTML = "Game ended! Size: ${stats.snakeSize}"
+        }
     }
 
 }

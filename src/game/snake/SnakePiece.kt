@@ -1,6 +1,6 @@
 package game.snake
 
-import game.geo.Point
+import geo.Point
 
 class SnakePiece(
         var location: Point

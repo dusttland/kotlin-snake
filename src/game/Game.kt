@@ -1,17 +1,20 @@
 package game
 
-import game.geo.Direction
-import game.geo.Point
+import geo.Direction
+import geo.Point
 import keyevent.KeyEvent
 import keyevent.KeyEventListener
 import game.snake.Snake
+import game.ticker.TickListener
+import game.ticker.Ticker
 import org.w3c.dom.Element
 
 class Game(
         container: Element,
         size: Int,
         var listener: GameListener?
-) : KeyEventListener {
+) : KeyEventListener,
+    TickListener {
 
     private val params = GameParams(
             container = container,
@@ -21,21 +24,46 @@ class Game(
 
     private val drawer = GameDrawer(this.params)
 
+    private val ticker = Ticker(listener = this)
+
+    private var activeDirection = Direction.UP
+
 
     init {
         KeyEvent(listener = this)
-        this.drawer.draw()
+        this.draw()
         this.listener?.onGameStateChanged(this.gameStats)
+        this.ticker.start()
     }
 
 
     val gameStats: GameStats
-        get() = GameStats(this.snake.size)
+        get() = GameStats(
+                isGameRunning = this.isRunning,
+                snakeSize = this.snake.size
+        )
 
 
     override fun onArrowKey(direction: Direction) {
-        this.moveSnakeTo(direction)
-        this.listener?.onGameStateChanged(this.gameStats)
+        if (!this.isRunning){
+            return
+        }
+
+        if (direction == this.snake.movingDirection.opposite) {
+            throw IllegalArgumentException("Can't move to snakes opposite direction")
+        }
+
+        this.activeDirection = direction
+    }
+
+    override fun onTick() {
+        try {
+            this.moveSnakeTo(this.activeDirection)
+        } catch (e: Exception) {
+            this.ticker.stop()
+        } finally {
+            this.listener?.onGameStateChanged(this.gameStats)
+        }
     }
 
 
@@ -45,13 +73,37 @@ class Game(
     private val foodLocation: Point
         get() = this.params.foodLocation
 
+    private val boardSize: Int
+        get() = this.params.boardSize
+
+    private val isRunning: Boolean
+        get() = this.ticker.isRunning
+
+    private fun draw() {
+        this.drawer.draw()
+    }
+
     private fun moveSnakeTo(direction: Direction) {
+        this.throwExceptionIfInvalidDirection(direction)
         this.snake.move(direction)
         if (this.snake.head.location == this.foodLocation) {
             this.snake.grow()
             this.params.randomizeFoodLocation()
         }
-        this.drawer.draw()
+        this.draw()
     }
+
+    private fun throwExceptionIfInvalidDirection(direction: Direction) {
+        val point = this.nextPoint(direction)
+        if (isPointOutOfBounds(point)) {
+            throw IllegalArgumentException("Direction goes out of bounds.")
+        }
+    }
+
+    private fun nextPoint(direction: Direction) = this.snake.head.location + direction.translation
+
+    private fun isPointOutOfBounds(point: Point) = isDimensionOutOfBounds(point.x) || isDimensionOutOfBounds(point.y)
+
+    private fun isDimensionOutOfBounds(dimension: Int) = dimension < 0 || dimension >= this.boardSize
 
 }
