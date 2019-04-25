@@ -16,17 +16,17 @@ class Game(
 ) : KeyEventListener,
     TickListener {
 
-    private val params = GameParams(
+    private val params: GameParams = GameParams(
             container = container,
             snake = Snake(),
             boardSize = size
     )
 
-    private val drawer = GameDrawer(this.params)
+    private val drawer: GameDrawer = GameDrawer(this.params)
 
-    private val ticker = Ticker(listener = this)
+    private val ticker: Ticker = Ticker(listener = this)
 
-    private var activeDirection = Direction.UP
+    private var activeDirection: Direction = this.snake.movingDirection
 
 
     init {
@@ -35,13 +35,6 @@ class Game(
         this.listener?.onGameStateChanged(this.gameStats)
         this.ticker.start()
     }
-
-
-    val gameStats: GameStats
-        get() = GameStats(
-                isGameRunning = this.isRunning,
-                snakeSize = this.snake.size
-        )
 
 
     override fun onArrowKey(direction: Direction) {
@@ -65,6 +58,13 @@ class Game(
             this.listener?.onGameStateChanged(this.gameStats)
         }
     }
+
+
+    val gameStats: GameStats
+        get() = GameStats(
+                isGameRunning = this.isRunning,
+                snakeSize = this.snake.size
+        )
 
 
     private val snake: Snake

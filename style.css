@@ -1,16 +1,3 @@
 .snake-board {
     border: 1px solid black;
 }
-
-.snake-board-box {
-    width: 10px;
-    height: 10px;
-}
-
-.snake-board-box.snake {
-    background-color: black;
-}
-
-.snake-board-box.food {
-    background-color: red;
-}

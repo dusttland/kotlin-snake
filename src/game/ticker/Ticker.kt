@@ -4,12 +4,14 @@ import kotlin.browser.window
 
 class Ticker(private val listener: TickListener) {
 
-    var interval: Int? = null
+    private var interval: Int? = null
+
 
     val isRunning: Boolean
         get() = this.interval != null
 
     fun start() {
+        this.stop()
         this.interval = window.setInterval({
             this.listener.onTick()
         }, 100)

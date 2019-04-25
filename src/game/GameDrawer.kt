@@ -1,13 +1,14 @@
 package game
 
-import controller.findElement
-import controller.removeChildren
 import game.view.SnakeBoardView
 import geo.Point
 import geo.PointD
 import geo.RectD
+import geo.pointD
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
+import utils.findElement
+import utils.removeChildren
 
 class GameDrawer(
         private val params: GameParams
@@ -31,9 +32,8 @@ class GameDrawer(
 
 
     private fun drawSnake(canvas: CanvasRenderingContext2D) {
-        val pieces = this.params.snake.pieceLocations
         canvas.fillStyle = "black"
-        pieces.forEach {
+        this.params.snake.pieceLocations.forEach {
             canvas.fillRect(it.canvasRect)
         }
     }

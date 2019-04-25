@@ -19,8 +19,8 @@ class MainController(
     private lateinit var game: Game
 
     override fun onCreate() {
-        this.statsText = findElement(MainView.ID.STATS)
-        this.snakeBoardContainer = findElement(MainView.ID.SNAKE_BOARD_CONTAINER)
+        this.statsText = this.findElement(MainView.ID.STATS)
+        this.snakeBoardContainer = this.findElement(MainView.ID.SNAKE_BOARD_CONTAINER)
 
         this.game = Game(this.snakeBoardContainer, size = 20, listener = this)
     }
