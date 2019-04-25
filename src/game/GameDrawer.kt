@@ -2,66 +2,45 @@ package game
 
 import controller.findElement
 import controller.removeChildren
-import geo.Point
 import game.view.SnakeBoardView
-import org.w3c.dom.Element
-import kotlin.dom.removeClass
+import geo.Point
+import geo.PointD
+import geo.RectD
+import org.w3c.dom.CanvasRenderingContext2D
+import org.w3c.dom.HTMLCanvasElement
 
 class GameDrawer(
         private val params: GameParams
 ) {
 
-    private val boardBoxes: Map<Point, Element>
+    private val canvasElement: HTMLCanvasElement
 
 
     init {
         this.initializeViewInContainer()
-        this.boardBoxes = this.boardBoxes()
+        this.canvasElement = this.canvasElement()
     }
 
 
     fun draw() {
-        for (i in 0 until this.params.boardSize) {
-            for (j in 0 until this.params.boardSize) {
-                this.drawBoxAt(Point(i, j))
-            }
+        val canvas = this.canvasElement.getContext("2d") as CanvasRenderingContext2D
+        this.clearCanvas(canvas)
+        this.drawSnake(canvas)
+        this.drawFood(canvas)
+    }
+
+
+    private fun drawSnake(canvas: CanvasRenderingContext2D) {
+        val pieces = this.params.snake.pieceLocations
+        canvas.fillStyle = "black"
+        pieces.forEach {
+            canvas.fillRect(it.canvasRect)
         }
     }
 
-
-    private fun drawBoxAt(point: Point) {
-        val isSnake = this.params.snake.isAt(point)
-        val hasFood = point == this.params.foodLocation
-        val element = this.boxElementAt(point)
-
-        element.removeClass(SnakeBoardView.CLASS.SNAKE, SnakeBoardView.CLASS.FOOD)
-
-        if (isSnake) {
-            element.classList.add(SnakeBoardView.CLASS.SNAKE)
-        } else if (hasFood) {
-            element.classList.add(SnakeBoardView.CLASS.FOOD)
-        }
-    }
-
-    private fun boardBoxes(): Map<Point, Element> {
-        val boardBoxes = mutableMapOf<Point, Element>()
-        for (i in 0 until this.params.boardSize) {
-            for (j in 0 until this.params.boardSize) {
-                val point = Point(i, j)
-                val box = this.findBoxElementAt(point)
-                boardBoxes[point] = box
-            }
-        }
-        return boardBoxes
-    }
-
-    private fun boxElementAt(point: Point): Element {
-        return this.boardBoxes[point] ?: throw IllegalArgumentException("No board box at $point.")
-    }
-
-    private fun findBoxElementAt(point: Point): Element {
-        val snakeBoard = this.params.container.findElement(SnakeBoardView.ID.BOARD)
-        return snakeBoard.findElement(SnakeBoardView.ID.boxIdOf(point))
+    private fun drawFood(canvas: CanvasRenderingContext2D) {
+        canvas.fillStyle = "red"
+        canvas.fillRect(this.params.foodLocation.canvasRect)
     }
 
     private fun initializeViewInContainer() {
@@ -69,5 +48,35 @@ class GameDrawer(
         val boardNode = SnakeBoardView.nodeOfSize(this.params.boardSize)
         this.params.container.appendChild(boardNode)
     }
+
+    private fun clearCanvas(canvas: CanvasRenderingContext2D) {
+        val width: Double = this.canvasElement.width.toDouble()
+        val height: Double = this.canvasElement.height.toDouble()
+        canvas.clearRect(0.0, 0.0, width, height)
+    }
+
+    private fun canvasElement(): HTMLCanvasElement {
+        val canvasElement = this.params.container.findElement(SnakeBoardView.ID.BOARD) as HTMLCanvasElement
+        canvasElement.style.width = "${canvasElement.width / 4}px"
+        canvasElement.style.height = "${canvasElement.height / 4}px"
+        return canvasElement
+    }
+
+    private fun CanvasRenderingContext2D.fillRect(rect: RectD) {
+        this.fillRect(rect.minX, rect.minY, rect.width, rect.height)
+    }
+
+    private val Point.canvasRect: RectD
+        get() {
+            val boxSize = SnakeBoardView.SIZE.BOX_SIZE.toDouble()
+            val boxPadding = SnakeBoardView.SIZE.BOX_PADDING.toDouble()
+            val pointD = this.pointD
+            val topLeft = PointD(
+                    boxPadding + pointD.x * boxSize + pointD.x * boxPadding,
+                    boxPadding + pointD.y * boxSize + pointD.y * boxPadding
+            )
+            val bottomRight = topLeft + PointD(boxSize, boxSize)
+            return RectD(topLeft, bottomRight)
+        }
 
 }

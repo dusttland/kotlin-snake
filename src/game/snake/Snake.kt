@@ -15,6 +15,8 @@ class Snake {
 
     override fun toString() = "Length: ${this.length}, Size: ${this.size}, Pieces: ${this.pieces}"
 
+    val pieceLocations: List<Point>
+        get() = this.pieces.map { it.location }
 
     val length: Int
         get() = this.pieces.size
