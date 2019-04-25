@@ -1,15 +1,25 @@
 package game
 
 import controller.findElement
+import controller.removeChildren
 import game.geo.Point
 import game.snake.Snake
 import org.w3c.dom.Element
-import view.SnakeBoardView
 
-class GameDrawer(private val snakeBoard: Element) {
+class GameDrawer(
+        private val container: Element,
+        private val boardSize: Int
+) {
 
-    private val boardSize: Int = this.boardSize()
-    private val boardBoxes: Map<Point, Element> = this.boardBoxes()
+    private val boardBoxes: Map<Point, Element>
+
+
+    init {
+        val boardNode = SnakeBoardView.nodeOfSize(boardSize)
+        this.container.removeChildren()
+        this.container.appendChild(boardNode)
+        this.boardBoxes = this.boardBoxes()
+    }
 
 
     fun draw(snake: Snake) {
@@ -20,8 +30,6 @@ class GameDrawer(private val snakeBoard: Element) {
         }
     }
 
-
-    private fun boardSize() = this.snakeBoard.getElementsByTagName("tr").length
 
     private fun drawBoxAt(snake: Snake, point: Point) {
         val isActive = snake.isAt(point)
@@ -51,7 +59,8 @@ class GameDrawer(private val snakeBoard: Element) {
     }
 
     private fun findBoxElementAt(point: Point): Element {
-        return this.snakeBoard.findElement(SnakeBoardView.boxIdOf(point))
+        val snakeBoard = this.container.findElement(SnakeBoardView.ID.BOARD)
+        return snakeBoard.findElement(SnakeBoardView.ID.boxIdOf(point))
     }
 
 }

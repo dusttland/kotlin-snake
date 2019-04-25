@@ -7,12 +7,13 @@ import game.snake.Snake
 import org.w3c.dom.Element
 
 class Game(
-        private val snakeBoard: Element,
+        private val container: Element,
+        size: Int,
         var listener: GameListener?
 ) : KeyEventListener {
 
     private val snake = Snake()
-    private val drawer = GameDrawer(this.snakeBoard)
+    private val drawer = GameDrawer(this.container, size)
 
 
     init {
