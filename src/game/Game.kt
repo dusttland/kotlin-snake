@@ -18,7 +18,6 @@ class Game(
 
     private val params: GameParams = GameParams(
             container = container,
-            snake = Snake(),
             boardSize = size
     )
 

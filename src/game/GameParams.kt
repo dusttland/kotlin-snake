@@ -6,10 +6,10 @@ import org.w3c.dom.Element
 
 class GameParams(
         val container: Element,
-        val snake: Snake,
         val boardSize: Int
 ) {
 
+    var snake: Snake = Snake(this.boardCenter)
     var foodLocation: Point = this.randomPointThatIsNotSnake
 
 
@@ -36,5 +36,8 @@ class GameParams(
             val range = 0 until this.boardSize
             return Point(x = range.random(), y = range.random())
         }
+
+    private val boardCenter: Point
+        get() = Point(this.boardSize / 2, this.boardSize / 2)
 
 }

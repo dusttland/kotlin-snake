@@ -3,17 +3,20 @@ package game.snake
 import geo.Direction
 import geo.Point
 
-class Snake {
+class Snake(
+        headLocation: Point
+) {
 
     private val pieces: MutableList<SnakePiece> = mutableListOf(
-            SnakePiece(10, 10),
-            SnakePiece(10, 11)
+            SnakePiece(headLocation),
+            SnakePiece(headLocation + Direction.DOWN.translation)
     )
 
     private var growCount = 0
 
 
     override fun toString() = "Length: ${this.length}, Size: ${this.size}, Pieces: ${this.pieces}"
+
 
     val pieceLocations: List<Point>
         get() = this.pieces.map { it.location }
