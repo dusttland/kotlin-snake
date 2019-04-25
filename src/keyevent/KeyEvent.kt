@@ -1,4 +1,4 @@
-package game.keyevent
+package keyevent
 
 import game.geo.Direction
 import org.w3c.dom.events.KeyboardEvent

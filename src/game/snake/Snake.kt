@@ -28,6 +28,10 @@ class Snake {
             return Direction.fromTranslation(moveTranslation)
         }
 
+    val head: SnakePiece
+        get() = this.pieces[0]
+
+
     fun grow() {
         this.growCount++
     }
@@ -44,9 +48,6 @@ class Snake {
 
     fun isAt(direction: Direction): Boolean = this.isAt(this.head.location + direction.translation)
 
-
-    private val head: SnakePiece
-        get() = this.pieces[0]
 
     private val neck: SnakePiece
         get() = this.pieces[1]

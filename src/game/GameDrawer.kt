@@ -3,49 +3,48 @@ package game
 import controller.findElement
 import controller.removeChildren
 import game.geo.Point
-import game.snake.Snake
 import org.w3c.dom.Element
 
 class GameDrawer(
-        private val container: Element,
-        private val boardSize: Int
+        private val params: GameParams
 ) {
 
     private val boardBoxes: Map<Point, Element>
 
 
     init {
-        val boardNode = SnakeBoardView.nodeOfSize(boardSize)
-        this.container.removeChildren()
-        this.container.appendChild(boardNode)
+        this.initializeViewInContainer()
         this.boardBoxes = this.boardBoxes()
     }
 
 
-    fun draw(snake: Snake) {
-        for (i in 0 until this.boardSize) {
-            for (j in 0 until this.boardSize) {
-                this.drawBoxAt(snake, Point(i, j))
+    fun draw() {
+        for (i in 0 until this.params.boardSize) {
+            for (j in 0 until this.params.boardSize) {
+                this.drawBoxAt(Point(i, j))
             }
         }
     }
 
 
-    private fun drawBoxAt(snake: Snake, point: Point) {
-        val isActive = snake.isAt(point)
+    private fun drawBoxAt(point: Point) {
+        val isSnake = this.params.snake.isAt(point)
+        val hasFood = point == this.params.foodLocation
         val element = this.boxElementAt(point)
 
-        element.classList.remove("active")
+        element.classList.remove(SNAKE_PIECE_CLASS, FOOD_CLASS)
 
-        if (isActive) {
-            element.classList.add("active")
+        if (isSnake) {
+            element.classList.add(SNAKE_PIECE_CLASS)
+        } else if (hasFood) {
+            element.classList.add(FOOD_CLASS)
         }
     }
 
     private fun boardBoxes(): Map<Point, Element> {
         val boardBoxes = mutableMapOf<Point, Element>()
-        for (i in 0 until this.boardSize) {
-            for (j in 0 until this.boardSize) {
+        for (i in 0 until this.params.boardSize) {
+            for (j in 0 until this.params.boardSize) {
                 val point = Point(i, j)
                 val box = this.findBoxElementAt(point)
                 boardBoxes[point] = box
@@ -59,8 +58,20 @@ class GameDrawer(
     }
 
     private fun findBoxElementAt(point: Point): Element {
-        val snakeBoard = this.container.findElement(SnakeBoardView.ID.BOARD)
+        val snakeBoard = this.params.container.findElement(SnakeBoardView.ID.BOARD)
         return snakeBoard.findElement(SnakeBoardView.ID.boxIdOf(point))
+    }
+
+    private fun initializeViewInContainer() {
+        this.params.container.removeChildren()
+        val boardNode = SnakeBoardView.nodeOfSize(this.params.boardSize)
+        this.params.container.appendChild(boardNode)
+    }
+
+
+    companion object {
+        const val SNAKE_PIECE_CLASS = "active"
+        const val FOOD_CLASS = "food"
     }
 
 }

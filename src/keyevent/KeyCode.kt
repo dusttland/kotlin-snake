@@ -1,4 +1,4 @@
-package game.keyevent
+package keyevent
 
 object KeyCode {
     const val UP = 38

@@ -1,27 +1,30 @@
 package game
 
 import game.geo.Direction
-import game.keyevent.KeyEvent
-import game.keyevent.KeyEventListener
+import game.geo.Point
+import keyevent.KeyEvent
+import keyevent.KeyEventListener
 import game.snake.Snake
 import org.w3c.dom.Element
 
 class Game(
-        private val container: Element,
+        container: Element,
         size: Int,
         var listener: GameListener?
 ) : KeyEventListener {
 
-    private val snake = Snake()
-    private val drawer = GameDrawer(this.container, size)
+    private val params = GameParams(
+            container = container,
+            snake = Snake(),
+            boardSize = size
+    )
+
+    private val drawer = GameDrawer(this.params)
 
 
     init {
         KeyEvent(listener = this)
-        for (i in 0..20) {
-            this.snake.grow()
-        }
-        this.drawer.draw(this.snake)
+        this.drawer.draw()
         this.listener?.onGameStateChanged(this.gameStats)
     }
 
@@ -35,9 +38,20 @@ class Game(
         this.listener?.onGameStateChanged(this.gameStats)
     }
 
+
+    private val snake: Snake
+        get() = this.params.snake
+
+    private val foodLocation: Point
+        get() = this.params.foodLocation
+
     private fun moveSnakeTo(direction: Direction) {
         this.snake.move(direction)
-        this.drawer.draw(this.snake)
+        if (this.snake.head.location == this.foodLocation) {
+            this.snake.grow()
+            this.params.randomizeFoodLocation()
+        }
+        this.drawer.draw()
     }
 
 }

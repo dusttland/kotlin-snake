@@ -6,3 +6,7 @@
 .snake-board-box.active {
     background-color: black;
 }
+
+.snake-board-box.food {
+    background-color: red;
+}
