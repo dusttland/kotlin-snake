@@ -5,6 +5,7 @@ import game.GameListener
 import game.GameStats
 import org.w3c.dom.Element
 import view.MainView
+import kotlin.dom.*
 
 class MainController(
         container: Element
@@ -13,24 +14,30 @@ class MainController(
 
     override fun view() = MainView.node
 
-    private lateinit var statsText: Element
+    private lateinit var statusText: Element
+    private lateinit var sizeText: Element
     private lateinit var snakeBoardContainer: Element
 
     private lateinit var game: Game
 
     override fun onCreate() {
-        this.statsText = this.findElement(MainView.ID.STATS)
+        this.statusText = this.findElement(MainView.ID.STATUS)
+        this.sizeText = this.findElement(MainView.ID.SIZE)
         this.snakeBoardContainer = this.findElement(MainView.ID.SNAKE_BOARD_CONTAINER)
 
         this.game = Game(this.snakeBoardContainer, size = 20, listener = this)
     }
 
     override fun onGameStateChanged(stats: GameStats) {
-        if (stats.isGameRunning) {
-            this.statsText.innerHTML = "Size: ${stats.snakeSize}"
+        val status = if (stats.isGameRunning) {
+            this.statusText.removeClass(MainView.Class.BAD)
+            "OK"
         } else {
-            this.statsText.innerHTML = "Game ended! Size: ${stats.snakeSize}"
+            this.statusText.addClass(MainView.Class.BAD)
+            "Wasted"
         }
+        this.statusText.innerHTML = status
+        this.sizeText.innerHTML = "${stats.snakeSize}"
     }
 
 }

@@ -8,28 +8,45 @@ import kotlin.browser.document
 object MainView {
 
     object ID {
-        const val STATS = "snake-stats"
         const val SNAKE_BOARD_CONTAINER = "snake-board-container"
+        const val STATUS = "status"
+        const val SIZE = "snake-size"
+    }
+
+    object Class {
+        const val BAD = "bad"
+        const val LIGHTER = "lighter"
+        const val STATS = "stats"
+        const val CONTAINER = "main-view-container"
     }
 
     val node: Node
-        get() = document.create.div {
-            h1 { +"This is the Kotlin-Snake." }
-            p { +"Here you can play snake somewhere" }
+        get() = document.create.div(Class.CONTAINER) {
+            h1 { +"Kotlin-Snake." }
+            div(Class.STATS) {
+                div {
+                    +"Size: "
+                    span(Class.LIGHTER) {
+                        id = ID.SIZE
+                    }
+                }
+                div {
+                    +"Status: "
+                    span(Class.LIGHTER) {
+                        id = ID.STATUS
+                    }
+                }
+            }
+            div {
+                id = ID.SNAKE_BOARD_CONTAINER
+            }
             p {
                 a("https://github.com/dusttland/kotlin-snake/tree/kotlinx") {
                     target = "blank"
                     +"Source code"
                 }
             }
-            h2 {
-                id = ID.STATS
 
-                +"Here are some stats."
-            }
-            div {
-                id = ID.SNAKE_BOARD_CONTAINER
-            }
         }
 
 }

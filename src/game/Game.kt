@@ -30,9 +30,9 @@ class Game(
 
     init {
         KeyEvent(listener = this)
+        this.ticker.start()
         this.draw()
         this.listener?.onGameStateChanged(this.gameStats)
-        this.ticker.start()
     }
 
 

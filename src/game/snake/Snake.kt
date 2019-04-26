@@ -12,7 +12,7 @@ class Snake(
             SnakePiece(headLocation + Direction.DOWN.translation)
     )
 
-    private var growCount = 0
+    private var growCount: Int = 0
 
 
     override fun toString() = "Length: ${this.length}, Size: ${this.size}, Pieces: ${this.pieces}"
@@ -36,9 +36,12 @@ class Snake(
     val head: SnakePiece
         get() = this.pieces[0]
 
-
     fun grow() {
-        this.growCount++
+        this.grow(1)
+    }
+
+    fun grow(amount: Int) {
+        this.growCount += amount
     }
 
     fun move(direction: Direction) {

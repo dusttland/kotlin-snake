@@ -7,6 +7,8 @@ import geo.RectD
 import geo.pointD
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
+import utils.canvasRenderingContext2D
+import utils.fillRect
 import utils.findElement
 import utils.removeChildren
 
@@ -24,15 +26,17 @@ class GameDrawer(
 
 
     fun draw() {
-        val canvas = this.canvasElement.getContext("2d") as CanvasRenderingContext2D
+        val canvas = this.canvas()
         this.clearCanvas(canvas)
         this.drawSnake(canvas)
         this.drawFood(canvas)
     }
 
 
+    private fun canvas(): CanvasRenderingContext2D = this.canvasElement.canvasRenderingContext2D
+
     private fun drawSnake(canvas: CanvasRenderingContext2D) {
-        canvas.fillStyle = "black"
+        canvas.fillStyle = "#09c509"
         this.params.snake.pieceLocations.forEach {
             canvas.fillRect(it.canvasRect)
         }
@@ -62,14 +66,10 @@ class GameDrawer(
         return canvasElement
     }
 
-    private fun CanvasRenderingContext2D.fillRect(rect: RectD) {
-        this.fillRect(rect.minX, rect.minY, rect.width, rect.height)
-    }
-
     private val Point.canvasRect: RectD
         get() {
-            val boxSize = SnakeBoardView.SIZE.BOX_SIZE.toDouble()
-            val boxPadding = SnakeBoardView.SIZE.BOX_PADDING.toDouble()
+            val boxSize = SnakeBoardView.Size.BOX_SIZE.toDouble()
+            val boxPadding = SnakeBoardView.Size.BOX_PADDING.toDouble()
             val pointD = this.pointD
             val topLeft = PointD(
                     boxPadding + pointD.x * boxSize + pointD.x * boxPadding,

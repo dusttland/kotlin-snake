@@ -1,3 +1,30 @@
+body {
+    font-family: MONOSPACE;
+    color: #09c509;
+    background-color: #1f211f;
+}
+
+.main-view-container {
+    margin: 0 auto;
+    display: table;
+}
+
+.lighter {
+    color: #0ae80a;
+}
+
+.bad {
+    color: red;
+}
+
+a {
+    color: #3aab3a;
+}
+
+.stats {
+    margin-bottom: 20px;
+}
+
 .snake-board {
-    border: 1px solid black;
+    border: 3px solid #0ae80a;
 }

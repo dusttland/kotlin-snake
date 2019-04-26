@@ -1,6 +1,8 @@
 package utils
 
+import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.Element
+import org.w3c.dom.HTMLCanvasElement
 
 fun Element.findElement(id: String): Element {
     val selector = "#$id"
@@ -14,3 +16,6 @@ fun Element.removeChildren() {
         firstChild = this.firstChild
     }
 }
+
+val HTMLCanvasElement.canvasRenderingContext2D: CanvasRenderingContext2D
+    get() = this.getContext("2d") as CanvasRenderingContext2D
