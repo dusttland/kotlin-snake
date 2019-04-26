@@ -1,6 +1,7 @@
 package game.ticker
 
-import kotlin.browser.window
+import utils.clearInterval
+import utils.interval
 
 class Ticker(private val listener: TickListener) {
 
@@ -12,14 +13,14 @@ class Ticker(private val listener: TickListener) {
 
     fun start() {
         this.stop()
-        this.interval = window.setInterval({
+        this.interval = interval(milliseconds = 100) {
             this.listener.onTick()
-        }, 100)
+        }
     }
 
     fun stop() {
         val interval = this.interval ?: return
-        window.clearInterval(interval)
+        clearInterval(interval)
         this.interval = null
     }
 
