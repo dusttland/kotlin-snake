@@ -18,12 +18,11 @@ class Game(
 
     private val params: GameParams = GameParams(
             container = container,
-            boardSize = size
+            boardSize = size,
+            ticker = Ticker(milliseconds = 100, listener = this)
     )
 
     private val drawer: GameDrawer = GameDrawer(this.params)
-
-    private val ticker: Ticker = Ticker(listener = this)
 
     private var activeDirection: Direction = this.snake.movingDirection
 
@@ -32,7 +31,6 @@ class Game(
         KeyEvent(listener = this)
         this.ticker.start()
         this.draw()
-        this.listener?.onGameStatusChanged(this.isRunning)
         this.listener?.onSnakeSizeChanged(this.snake.size)
     }
 
@@ -54,7 +52,7 @@ class Game(
             this.moveSnakeTo(this.activeDirection)
         } catch (e: Exception) {
             this.ticker.stop()
-            this.listener?.onGameStatusChanged(this.isRunning)
+            this.draw()
         }
     }
 
@@ -68,8 +66,11 @@ class Game(
     private val boardSize: Int
         get() = this.params.boardSize
 
+    private val ticker: Ticker
+        get() = this.params.ticker
+
     private val isRunning: Boolean
-        get() = this.ticker.isRunning
+        get() = this.params.isRunning
 
     private fun draw() {
         this.drawer.draw()

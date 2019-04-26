@@ -14,14 +14,12 @@ class MainController(
 
     override fun viewNode() = MainView.node
 
-    private lateinit var statusText: Element
     private lateinit var sizeText: Element
     private lateinit var snakeBoardContainer: Element
 
     private lateinit var game: Game
 
     override fun onCreate() {
-        this.statusText = this.findElement(MainView.ID.STATUS)
         this.sizeText = this.findElement(MainView.ID.SIZE)
         this.snakeBoardContainer = this.findElement(MainView.ID.SNAKE_BOARD_CONTAINER)
 
@@ -30,17 +28,6 @@ class MainController(
 
     override fun onSnakeSizeChanged(size: Int) {
         this.sizeText.innerHTML = "$size"
-    }
-
-    override fun onGameStatusChanged(isRunning: Boolean) {
-        val status = if (isRunning) {
-            this.statusText.removeClass(MainView.Class.BAD)
-            "OK"
-        } else {
-            this.statusText.addClass(MainView.Class.BAD)
-            "Wasted"
-        }
-        this.statusText.innerHTML = status
     }
 
 }

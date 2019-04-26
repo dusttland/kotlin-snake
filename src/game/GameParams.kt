@@ -2,11 +2,13 @@ package game
 
 import ee.dustland.kotlin.geo.Point
 import game.snake.Snake
+import game.ticker.Ticker
 import org.w3c.dom.Element
 
 class GameParams(
         val container: Element,
-        val boardSize: Int
+        val boardSize: Int,
+        val ticker: Ticker
 ) {
 
     var snake: Snake = Snake(this.boardCenter)
@@ -18,9 +20,13 @@ class GameParams(
     }
 
 
+    val isRunning: Boolean
+        get() = this.ticker.isRunning
+
     fun randomizeFoodLocation() {
         this.foodLocation = this.randomPointThatIsNotSnake
     }
+
 
     private val randomPointThatIsNotSnake: Point
         get() {

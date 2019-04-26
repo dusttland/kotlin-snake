@@ -3,7 +3,10 @@ package game.ticker
 import ee.dustland.kotlin.js.utils.clearInterval
 import ee.dustland.kotlin.js.utils.interval
 
-class Ticker(private val listener: TickListener) {
+class Ticker(
+        private val milliseconds: Int,
+        private val listener: TickListener
+) {
 
     private var interval: Int? = null
 
@@ -13,7 +16,7 @@ class Ticker(private val listener: TickListener) {
 
     fun start() {
         this.stop()
-        this.interval = interval(milliseconds = 100) {
+        this.interval = interval(milliseconds = this.milliseconds) {
             this.listener.onTick()
         }
     }

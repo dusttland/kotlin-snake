@@ -13,6 +13,7 @@ object SnakeBoardView {
 
     object Class {
         const val BOARD = "snake-board"
+        const val BAD = "bad"
     }
 
     object Size {

@@ -8,6 +8,8 @@ import ee.dustland.kotlin.geo.pointD
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import ee.dustland.kotlin.js.utils.*
+import kotlin.dom.addClass
+import kotlin.dom.removeClass
 
 class GameDrawer(
         private val params: GameParams
@@ -24,6 +26,7 @@ class GameDrawer(
 
     fun draw() {
         val canvas = this.canvas()
+        this.drawCanvasFrame()
         this.clearCanvas(canvas)
         this.drawSnake(canvas)
         this.drawFood(canvas)
@@ -31,6 +34,14 @@ class GameDrawer(
 
 
     private fun canvas(): CanvasRenderingContext2D = this.canvasElement.canvasRenderingContext2D
+
+    private fun drawCanvasFrame() {
+        if (this.params.isRunning) {
+            this.canvasElement.removeClass(SnakeBoardView.Class.BAD)
+        } else {
+            this.canvasElement.addClass(SnakeBoardView.Class.BAD)
+        }
+    }
 
     private fun drawSnake(canvas: CanvasRenderingContext2D) {
         canvas.fillStyle = "#09c509"

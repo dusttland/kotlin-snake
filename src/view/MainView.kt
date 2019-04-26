@@ -9,12 +9,10 @@ object MainView {
 
     object ID {
         const val SNAKE_BOARD_CONTAINER = "snake-board-container"
-        const val STATUS = "status"
         const val SIZE = "snake-size"
     }
 
     object Class {
-        const val BAD = "bad"
         const val LIGHTER = "lighter"
         const val STATS = "stats"
         const val CONTAINER = "main-view-container"
@@ -28,12 +26,6 @@ object MainView {
                     +"Size: "
                     span(Class.LIGHTER) {
                         id = ID.SIZE
-                    }
-                }
-                div {
-                    +"Status: "
-                    span(Class.LIGHTER) {
-                        id = ID.STATUS
                     }
                 }
             }
