@@ -21,8 +21,7 @@ object SnakeBoardView {
     }
 
 
-    fun nodeOfSize(size: Int) = document.create.canvas {
-        classes = setOf(Class.BOARD)
+    fun nodeOfSize(size: Int) = document.create.canvas(Class.BOARD) {
         width = sizeInPixels(size).toString()
         height = sizeInPixels(size).toString()
         id = ID.BOARD

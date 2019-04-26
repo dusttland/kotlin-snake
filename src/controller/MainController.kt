@@ -8,11 +8,11 @@ import view.MainView
 import kotlin.dom.*
 
 class MainController(
-        container: Element
-) : Controller(container),
+        containerID: String
+) : Controller(containerID),
     GameListener {
 
-    override fun view() = MainView.node
+    override fun viewNode() = MainView.node
 
     private lateinit var statusText: Element
     private lateinit var sizeText: Element
