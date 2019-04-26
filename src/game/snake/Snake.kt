@@ -1,7 +1,7 @@
 package game.snake
 
-import geo.Direction
-import geo.Point
+import ee.dustland.kotlin.geo.Direction
+import ee.dustland.kotlin.geo.Point
 
 class Snake(
         headLocation: Point

@@ -1,7 +1,7 @@
 package game.ticker
 
-import utils.clearInterval
-import utils.interval
+import ee.dustland.kotlin.js.utils.clearInterval
+import ee.dustland.kotlin.js.utils.interval
 
 class Ticker(private val listener: TickListener) {
 

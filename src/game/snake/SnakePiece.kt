@@ -1,6 +1,6 @@
 package game.snake
 
-import geo.Point
+import ee.dustland.kotlin.geo.Point
 
 class SnakePiece(
         var location: Point

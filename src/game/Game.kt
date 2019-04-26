@@ -1,9 +1,9 @@
 package game
 
-import geo.Direction
-import geo.Point
-import keyevent.KeyEvent
-import keyevent.KeyEventListener
+import ee.dustland.kotlin.geo.Direction
+import ee.dustland.kotlin.geo.Point
+import ee.dustland.kotlin.js.keyevent.KeyEvent
+import ee.dustland.kotlin.js.keyevent.KeyEventListener
 import game.snake.Snake
 import game.ticker.TickListener
 import game.ticker.Ticker

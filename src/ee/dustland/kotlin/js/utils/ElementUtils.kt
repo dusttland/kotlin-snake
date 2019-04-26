@@ -1,4 +1,4 @@
-package utils
+package ee.dustland.kotlin.js.utils
 
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.Element

@@ -1,4 +1,4 @@
-package geo
+package ee.dustland.kotlin.geo
 
 enum class Direction {
 

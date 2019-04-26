@@ -1,6 +1,6 @@
-package keyevent
+package ee.dustland.kotlin.js.keyevent
 
-import geo.Direction
+import ee.dustland.kotlin.geo.Direction
 import org.w3c.dom.events.KeyboardEvent
 import kotlin.browser.document
 

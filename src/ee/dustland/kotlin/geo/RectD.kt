@@ -1,4 +1,4 @@
-package geo
+package ee.dustland.kotlin.geo
 
 data class RectD(
         val minX: Double = 0.0,

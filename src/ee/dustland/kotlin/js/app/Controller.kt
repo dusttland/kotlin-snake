@@ -1,8 +1,8 @@
-package controller
+package ee.dustland.kotlin.js.app
 
 import org.w3c.dom.Element
 import org.w3c.dom.Node
-import utils.*
+import ee.dustland.kotlin.js.utils.*
 
 abstract class Controller(private val rootElement: Element) {
 

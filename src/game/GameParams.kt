@@ -1,6 +1,6 @@
 package game
 
-import geo.Point
+import ee.dustland.kotlin.geo.Point
 import game.snake.Snake
 import org.w3c.dom.Element
 

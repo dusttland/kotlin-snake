@@ -1,6 +1,6 @@
-package utils
+package ee.dustland.kotlin.js.utils
 
-import geo.RectD
+import ee.dustland.kotlin.geo.RectD
 import org.w3c.dom.CanvasRenderingContext2D
 
 fun CanvasRenderingContext2D.fillRect(rect: RectD) {

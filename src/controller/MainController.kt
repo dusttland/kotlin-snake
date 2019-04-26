@@ -1,5 +1,6 @@
 package controller
 
+import ee.dustland.kotlin.js.app.Controller
 import game.Game
 import game.GameListener
 import org.w3c.dom.Element

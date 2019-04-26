@@ -1,4 +1,4 @@
-package utils
+package ee.dustland.kotlin.js.utils
 
 import kotlin.browser.window
 

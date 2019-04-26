@@ -1,16 +1,13 @@
 package game
 
 import game.view.SnakeBoardView
-import geo.Point
-import geo.PointD
-import geo.RectD
-import geo.pointD
+import ee.dustland.kotlin.geo.Point
+import ee.dustland.kotlin.geo.PointD
+import ee.dustland.kotlin.geo.RectD
+import ee.dustland.kotlin.geo.pointD
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
-import utils.canvasRenderingContext2D
-import utils.fillRect
-import utils.findElement
-import utils.removeChildren
+import ee.dustland.kotlin.js.utils.*
 
 class GameDrawer(
         private val params: GameParams

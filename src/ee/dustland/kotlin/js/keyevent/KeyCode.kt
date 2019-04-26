@@ -1,4 +1,4 @@
-package keyevent
+package ee.dustland.kotlin.js.keyevent
 
 object KeyCode {
     const val UP = 38
