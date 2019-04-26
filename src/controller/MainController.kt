@@ -2,7 +2,6 @@ package controller
 
 import game.Game
 import game.GameListener
-import game.GameStats
 import org.w3c.dom.Element
 import view.MainView
 import kotlin.dom.*
@@ -28,8 +27,12 @@ class MainController(
         this.game = Game(this.snakeBoardContainer, size = 20, listener = this)
     }
 
-    override fun onGameStateChanged(stats: GameStats) {
-        val status = if (stats.isGameRunning) {
+    override fun onSnakeSizeChanged(size: Int) {
+        this.sizeText.innerHTML = "$size"
+    }
+
+    override fun onGameStatusChanged(isRunning: Boolean) {
+        val status = if (isRunning) {
             this.statusText.removeClass(MainView.Class.BAD)
             "OK"
         } else {
@@ -37,7 +40,6 @@ class MainController(
             "Wasted"
         }
         this.statusText.innerHTML = status
-        this.sizeText.innerHTML = "${stats.snakeSize}"
     }
 
 }

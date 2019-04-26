@@ -1,5 +1,6 @@
 package game
 
 interface GameListener {
-    fun onGameStateChanged(stats: GameStats)
+    fun onGameStatusChanged(isRunning: Boolean)
+    fun onSnakeSizeChanged(size: Int)
 }

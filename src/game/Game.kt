@@ -32,7 +32,8 @@ class Game(
         KeyEvent(listener = this)
         this.ticker.start()
         this.draw()
-        this.listener?.onGameStateChanged(this.gameStats)
+        this.listener?.onGameStatusChanged(this.isRunning)
+        this.listener?.onSnakeSizeChanged(this.snake.size)
     }
 
 
@@ -53,17 +54,9 @@ class Game(
             this.moveSnakeTo(this.activeDirection)
         } catch (e: Exception) {
             this.ticker.stop()
-        } finally {
-            this.listener?.onGameStateChanged(this.gameStats)
+            this.listener?.onGameStatusChanged(this.isRunning)
         }
     }
-
-
-    val gameStats: GameStats
-        get() = GameStats(
-                isGameRunning = this.isRunning,
-                snakeSize = this.snake.size
-        )
 
 
     private val snake: Snake
@@ -88,6 +81,7 @@ class Game(
         if (this.snake.head.location == this.foodLocation) {
             this.snake.grow()
             this.params.randomizeFoodLocation()
+            this.listener?.onSnakeSizeChanged(this.snake.size)
         }
         this.draw()
     }
