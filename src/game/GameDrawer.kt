@@ -36,10 +36,10 @@ class GameDrawer(
     private fun canvas(): CanvasRenderingContext2D = this.canvasElement.canvasRenderingContext2D
 
     private fun drawCanvasFrame() {
-        if (this.params.isRunning) {
-            this.canvasElement.removeClass(SnakeBoardView.Class.BAD)
-        } else {
+        if (this.params.status == GameStatus.ENDED) {
             this.canvasElement.addClass(SnakeBoardView.Class.BAD)
+        } else {
+            this.canvasElement.removeClass(SnakeBoardView.Class.BAD)
         }
     }
 

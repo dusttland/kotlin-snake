@@ -1,7 +1,7 @@
 package ee.dustland.kotlin.js.keyevent
 
-import ee.dustland.kotlin.geo.Direction
+import org.w3c.dom.events.KeyboardEvent
 
 interface KeyEventListener {
-    fun onArrowKey(direction: Direction)
+    fun onKeyboardEvent(event: KeyboardEvent)
 }

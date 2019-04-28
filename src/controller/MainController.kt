@@ -1,9 +1,13 @@
 package controller
 
+import ee.dustland.kotlin.geo.Direction
 import ee.dustland.kotlin.js.app.Controller
+import ee.dustland.kotlin.js.keyevent.arrowKeyDirection
+import ee.dustland.kotlin.js.keyevent.character
 import game.Game
 import game.GameListener
 import org.w3c.dom.Element
+import org.w3c.dom.events.KeyboardEvent
 import view.MainView
 import kotlin.dom.*
 
@@ -28,6 +32,21 @@ class MainController(
 
     override fun onSnakeSizeChanged(size: Int) {
         this.sizeText.innerHTML = "$size"
+    }
+
+    override fun onKeyboardEvent(event: KeyboardEvent) {
+        val arrowKeyDirection: Direction? = event.arrowKeyDirection
+        when {
+
+            arrowKeyDirection != null -> this.game.activeDirection = arrowKeyDirection
+
+            event.character == ' ' -> {
+                if (!this.game.isRunning) {
+                    this.game.start()
+                }
+            }
+
+        }
     }
 
 }

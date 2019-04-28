@@ -2,8 +2,6 @@ package game
 
 import ee.dustland.kotlin.geo.Direction
 import ee.dustland.kotlin.geo.Point
-import ee.dustland.kotlin.js.keyevent.KeyEvent
-import ee.dustland.kotlin.js.keyevent.KeyEventListener
 import game.snake.Snake
 import game.ticker.TickListener
 import game.ticker.Ticker
@@ -13,8 +11,7 @@ class Game(
         container: Element,
         size: Int,
         var listener: GameListener?
-) : KeyEventListener,
-    TickListener {
+) : TickListener {
 
     private val params: GameParams = GameParams(
             container = container,
@@ -24,53 +21,59 @@ class Game(
 
     private val drawer: GameDrawer = GameDrawer(this.params)
 
-    private var activeDirection: Direction = this.snake.movingDirection
-
 
     init {
-        KeyEvent(listener = this)
-        this.ticker.start()
         this.draw()
         this.listener?.onSnakeSizeChanged(this.snake.size)
     }
 
 
-    override fun onArrowKey(direction: Direction) {
-        if (!this.isRunning){
-            return
+    val isRunning: Boolean
+        get() = this.params.isRunning
+
+    var activeDirection: Direction
+        get() = this.params.activeDirection
+        set(direction) {
+            if (!this.isRunning){
+                return
+            }
+
+            if (direction == this.snake.movingDirection.opposite) {
+                throw IllegalArgumentException("Can't move to snakes opposite direction")
+            }
+
+            this.params.activeDirection = direction
         }
 
-        if (direction == this.snake.movingDirection.opposite) {
-            throw IllegalArgumentException("Can't move to snakes opposite direction")
-        }
-
-        this.activeDirection = direction
+    fun start() {
+        this.params.start()
+        this.draw()
+        this.listener?.onSnakeSizeChanged(this.snake.size)
     }
+
+    fun stop() {
+        this.params.stop()
+        this.draw()
+    }
+
 
     override fun onTick() {
         try {
             this.moveSnakeTo(this.activeDirection)
         } catch (e: Exception) {
-            this.ticker.stop()
-            this.draw()
+            this.stop()
         }
     }
 
-
-    private val snake: Snake
+    private var snake: Snake
         get() = this.params.snake
+        set(value) { this.params.snake = value }
 
     private val foodLocation: Point
         get() = this.params.foodLocation
 
     private val boardSize: Int
         get() = this.params.boardSize
-
-    private val ticker: Ticker
-        get() = this.params.ticker
-
-    private val isRunning: Boolean
-        get() = this.params.isRunning
 
     private fun draw() {
         this.drawer.draw()

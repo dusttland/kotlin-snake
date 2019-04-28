@@ -1,5 +1,6 @@
 package game
 
+import ee.dustland.kotlin.geo.Direction
 import ee.dustland.kotlin.geo.Point
 import game.snake.Snake
 import game.ticker.Ticker
@@ -11,8 +12,11 @@ class GameParams(
         val ticker: Ticker
 ) {
 
-    var snake: Snake = Snake(this.boardCenter)
+    private var hasBeenStarted: Boolean = false
+
+    var snake: Snake = this.initialSnake
     var foodLocation: Point = this.randomPointThatIsNotSnake
+    var activeDirection: Direction = this.snake.movingDirection
 
 
     init {
@@ -22,6 +26,24 @@ class GameParams(
 
     val isRunning: Boolean
         get() = this.ticker.isRunning
+
+    val status: GameStatus
+        get() = when {
+            !this.hasBeenStarted -> GameStatus.NOT_STARTED
+            this.isRunning -> GameStatus.RUNNING
+            else -> GameStatus.ENDED
+        }
+
+    fun start() {
+        this.hasBeenStarted = true
+        this.snake = this.initialSnake
+        this.activeDirection = this.snake.movingDirection
+        this.ticker.start()
+    }
+
+    fun stop() {
+        this.ticker.stop()
+    }
 
     fun randomizeFoodLocation() {
         this.foodLocation = this.randomPointThatIsNotSnake
@@ -36,6 +58,9 @@ class GameParams(
             }
             return point
         }
+
+    private val initialSnake: Snake
+        get() = Snake(this.boardCenter)
 
     private val randomPointOnBoard: Point
         get() {

@@ -1,3 +1,5 @@
+import controller.MainController
+
 fun main() {
-    SnakeApp("app")
+    MainController("app")
 }
