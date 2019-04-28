@@ -6,6 +6,8 @@ import ee.dustland.kotlin.geo.Point
 import ee.dustland.kotlin.geo.PointD
 import ee.dustland.kotlin.geo.RectD
 import ee.dustland.kotlin.geo.pointD
+import ee.dustland.kotlin.interpolator.AccelerateInterpolator
+import ee.dustland.kotlin.interpolator.DecelerateInterpolator
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import ee.dustland.kotlin.js.utils.*
@@ -90,7 +92,9 @@ class GameDrawer(
                 return@forEach
             }
 
-            val transparency = transparencyAt(OUT_DURATION - currentTime + startTime, OUT_DURATION)
+            val time = (OUT_DURATION - currentTime + startTime) / OUT_DURATION
+            val interpolator = AccelerateInterpolator()
+            val transparency = interpolator.interpolationAt(time)
             val color = this.snakeColor.withAlpha(transparency)
 
             canvas.fillStyle = color.hex
@@ -114,7 +118,9 @@ class GameDrawer(
 
         foodIn = this.foodFadeIn
         if (foodIn != null) {
-            val transparency = transparencyAt(currentTime - foodIn.second, FOOD_DURATION)
+            val time = (currentTime - foodIn.second) / FOOD_DURATION
+            val interpolator = DecelerateInterpolator()
+            val transparency = interpolator.interpolationAt(time)
             val color = this.foodColor.withAlpha(transparency)
             canvas.fillStyle = color.hex
             canvas.fillRect(foodIn.first.canvasRect)
@@ -152,10 +158,6 @@ class GameDrawer(
             val bottomRight = topLeft + PointD(boxSize, boxSize)
             return RectD(topLeft, bottomRight)
         }
-
-    private fun transparencyAt(time: Double, duration: Double): Double {
-        return time / duration
-    }
 
     companion object {
         const val OUT_DURATION = 300.0
