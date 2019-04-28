@@ -20,7 +20,7 @@ object MainView {
 
     val node: Node
         get() = document.create.div(Class.CONTAINER) {
-            h1 { +"Kotlin-Snake." }
+            h1 { +"KotlinSnake.kt" }
             div(Class.STATS) {
                 div {
                     +"Size: "

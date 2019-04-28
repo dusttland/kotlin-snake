@@ -1,5 +1,6 @@
 package game
 
+import ee.dustland.kotlin.color.Color
 import game.view.SnakeBoardView
 import ee.dustland.kotlin.geo.Point
 import ee.dustland.kotlin.geo.PointD
@@ -17,6 +18,14 @@ class GameDrawer(
 
     private val canvasElement: HTMLCanvasElement
 
+    private var previousSnakePoints: List<Point> = listOf()
+    private var previousFoodLocation: Point = this.params.foodLocation
+    private var foodFadeIn: Pair<Point, Double>? = null
+    private val snakeFadeOut: MutableMap<Point, Double> = mutableMapOf()
+
+    private val snakeColor = Color(9, 179, 9)
+    private val foodColor = Color(255, 0, 0)
+
 
     init {
         this.initializeViewInContainer()
@@ -26,14 +35,34 @@ class GameDrawer(
 
     fun draw() {
         val canvas = this.canvas()
+        this.prepareAnimationData()
         this.drawCanvasFrame()
         this.clearCanvas(canvas)
-        this.drawSnake(canvas)
+        this.drawFoodAnimation(canvas)
         this.drawFood(canvas)
+        this.drawSnakeAnimation(canvas)
+        this.drawSnake(canvas)
     }
+
+    val areAnimationsRunning: Boolean
+        get() = !this.snakeFadeOut.isEmpty() || this.foodFadeIn != null
 
 
     private fun canvas(): CanvasRenderingContext2D = this.canvasElement.canvasRenderingContext2D
+
+    private fun prepareAnimationData() {
+        val pieces = this.params.snake.pieceLocations
+        this.previousSnakePoints.subtract(pieces).forEach {
+            this.snakeFadeOut[it] = millisNow()
+        }
+
+        this.previousSnakePoints = pieces
+
+        if (this.params.foodLocation != this.previousFoodLocation) {
+            this.foodFadeIn = Pair(this.params.foodLocation, millisNow())
+            this.previousFoodLocation = this.params.foodLocation
+        }
+    }
 
     private fun drawCanvasFrame() {
         if (this.params.status == GameStatus.ENDED) {
@@ -44,15 +73,52 @@ class GameDrawer(
     }
 
     private fun drawSnake(canvas: CanvasRenderingContext2D) {
-        canvas.fillStyle = "#09c509"
+        canvas.fillStyle = this.snakeColor.hex
         this.params.snake.pieceLocations.forEach {
             canvas.fillRect(it.canvasRect)
         }
     }
 
+    private fun drawSnakeAnimation(canvas: CanvasRenderingContext2D) {
+        this.snakeFadeOut.forEach { entry ->
+            val point = entry.key
+            val startTime = entry.value
+
+            val currentTime = millisNow()
+            if (currentTime - startTime > OUT_DURATION) {
+                this.snakeFadeOut.remove(point)
+                return@forEach
+            }
+
+            val transparency = transparencyAt(OUT_DURATION - currentTime + startTime, OUT_DURATION)
+            val color = this.snakeColor.withAlpha(transparency)
+
+            canvas.fillStyle = color.hex
+            canvas.fillRect(point.canvasRect)
+        }
+    }
+
     private fun drawFood(canvas: CanvasRenderingContext2D) {
-        canvas.fillStyle = "red"
-        canvas.fillRect(this.params.foodLocation.canvasRect)
+        if (this.foodFadeIn == null) {
+            canvas.fillStyle = this.foodColor.hex
+            canvas.fillRect(this.params.foodLocation.canvasRect)
+        }
+    }
+
+    private fun drawFoodAnimation(canvas: CanvasRenderingContext2D) {
+        val currentTime = millisNow()
+        var foodIn = this.foodFadeIn
+        if (foodIn != null && currentTime - foodIn.second > FOOD_DURATION) {
+            this.foodFadeIn = null
+        }
+
+        foodIn = this.foodFadeIn
+        if (foodIn != null) {
+            val transparency = transparencyAt(currentTime - foodIn.second, FOOD_DURATION)
+            val color = this.foodColor.withAlpha(transparency)
+            canvas.fillStyle = color.hex
+            canvas.fillRect(foodIn.first.canvasRect)
+        }
     }
 
     private fun initializeViewInContainer() {
@@ -86,5 +152,14 @@ class GameDrawer(
             val bottomRight = topLeft + PointD(boxSize, boxSize)
             return RectD(topLeft, bottomRight)
         }
+
+    private fun transparencyAt(time: Double, duration: Double): Double {
+        return time / duration
+    }
+
+    companion object {
+        const val OUT_DURATION = 300.0
+        const val FOOD_DURATION = 500.0
+    }
 
 }

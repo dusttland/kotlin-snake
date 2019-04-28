@@ -2,6 +2,8 @@ package game
 
 import ee.dustland.kotlin.geo.Direction
 import ee.dustland.kotlin.geo.Point
+import ee.dustland.kotlin.js.utils.clearInterval
+import ee.dustland.kotlin.js.utils.interval
 import game.snake.Snake
 import game.ticker.TickListener
 import game.ticker.Ticker
@@ -16,10 +18,13 @@ class Game(
     private val params: GameParams = GameParams(
             container = container,
             boardSize = size,
-            ticker = Ticker(milliseconds = 100, listener = this)
+            ticker = Ticker(milliseconds = 102, listener = this)
     )
 
     private val drawer: GameDrawer = GameDrawer(this.params)
+
+    private var isDrawerAllowed: Boolean = false
+    private var drawingInterval: Int? = null
 
 
     init {
@@ -46,12 +51,25 @@ class Game(
         }
 
     fun start() {
+        this.isDrawerAllowed = true
+        this.drawingInterval = interval(16) {
+            if (this.isDrawerAllowed) {
+                this.draw()
+            } else if (this.drawer.areAnimationsRunning) {
+                this.draw()
+            } else {
+                val interval = this.drawingInterval
+                if (interval != null)
+                    clearInterval(interval)
+            }
+        }
         this.params.start()
         this.draw()
         this.listener?.onSnakeSizeChanged(this.snake.size)
     }
 
     fun stop() {
+        this.isDrawerAllowed = false
         this.params.stop()
         this.draw()
     }
@@ -87,7 +105,6 @@ class Game(
             this.params.randomizeFoodLocation()
             this.listener?.onSnakeSizeChanged(this.snake.size)
         }
-        this.draw()
     }
 
     private fun throwExceptionIfInvalidDirection(direction: Direction) {
